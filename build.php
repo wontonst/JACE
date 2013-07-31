@@ -6,7 +6,7 @@ $files = array(
     'atlasimage',
     'atlasdefinition',
     'coordinates',
-'resources,'
+'resources',
     'engine'
 );
 
