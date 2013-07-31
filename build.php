@@ -5,7 +5,8 @@ $files = array(
     'animation',
     'atlasimage',
     'atlasdefinition',
-    'coordinate',
+    'coordinates',
+'resources,'
     'engine'
 );
 
