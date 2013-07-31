@@ -1,4 +1,4 @@
-JuICE
+JACE
 =====
 
-JavascrIpt Canvas Engine
+JAvascript Canvas Engine
