@@ -3,7 +3,9 @@
 $files = array(
     'drawable',
     'animation',
-    'atlas',
+    'atlasimage',
+    'atlasdefinition',
+    'coordinate',
     'engine'
 );
 

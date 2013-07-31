@@ -9,11 +9,13 @@ var engine = {
     /**
      * @brief constructor for the engine
      * @param {string} id id of the canvas element
+     * @param {int} tr refresh rate in ms
      * @param {int} h height of the canvas
      * @param {int} w width of the canvas
      * @returns {undefined}
      */
-    Engine: function(id, h, w) {
+    Engine: function(id, tr, h, w) {
+        this.tickrate = tr;
         this.canvas = document.getElementById(id)
         this.height = h;
         this.width = w;
@@ -21,8 +23,8 @@ var engine = {
         this.canvas.width = this.width;
         this.context = this.canvas.getContext('2d');
     },
-    start: function(speed) {
-        setInterval('engine.tick()', speed);
+    start: function() {
+        setInterval('engine.tick()', this.tickrate);
     },
     stop: function() {
         clearInterval(thread);
@@ -39,6 +41,23 @@ var engine = {
         for (var i = 0; i < engine.objects.length; i++) {
             engine.objects[i].tick();
         }
+    },
+    /**
+     * @brief constructor for Drawable
+     * @param {2DCanvasContext} ctx 
+     * @param {AtlasImage} aimage 
+     */
+    draw: function(aimage) {
+        console.log(this.atlas.atlasx + "," + this.atlas.atlasy + ","
+                + this.atlas.imgwidth + "," + this.atlas.imgheight + ","
+                + this.getNextX() + "," + this.getNextY() + "," +
+                this.atlast.imgwidth + "," + this.atlast.imgheight);
+
+        engine.context.drawImage(aimage.img,
+                aimage.atlas.atlasx, aimage.atlas.atlasy,
+                aimage.atlas.imgwidth, aimage.atlas.imgheight,
+                this.position.x, this.position.y,
+                aimage.atlas.imgwidth, aimage.atlas.imgheight);
     },
     getJSON: function(url, funct) {
         var xmlhttp;
