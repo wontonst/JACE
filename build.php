@@ -1,16 +1,16 @@
 <?php
 
 $files = array(
+'resources',
     'drawable',
     'animation',
     'atlasimage',
     'atlasdefinition',
     'coordinates',
-'resources',
     'engine'
 );
 
 foreach($files as $v){
-    include('src/'.$v.'.js');
+    include(__DIR__.'/src/'.$v.'.js');
 }
 ?>
