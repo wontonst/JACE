@@ -22,7 +22,7 @@ var engine = {
         this.context = this.canvas.getContext('2d');
     },
     start: function(speed) {
-        setInterval('tick()', speed);
+        setInterval('engine.tick()', speed);
     },
     stop: function() {
         clearInterval(thread);
@@ -30,8 +30,15 @@ var engine = {
     addDrawable: function(nd) {
         this.objects.push(nd);
     },
-    resourceOnload: function(r){
-	console.log(r +  " successfully loaded.");
+    resourceOnload: function(r) {
+        console.log(r + " successfully loaded.");
+    },
+    tick: function() {
+        console.log("tick");
+        engine.context.clearRect(0, 0, engine.width, engine.height);
+        for (var i = 0; i < engine.objects.length; i++) {
+            engine.objects[i].tick();
+        }
     },
     getJSON: function(url, funct)
     {
@@ -46,19 +53,13 @@ var engine = {
         }
         xmlhttp.onreadystatechange = function()
         {
-	    if(xmlhttp.readyState == 4 && xmlhttp.status == 200){
-            funct(xmlhttp.responseText);
-	    }
+            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                funct(xmlhttp.responseText);
+            }
         }
         xmlhttp.open("GET", url, true);
         xmlhttp.send();
     }
 };
 //HORRIBEL HACK WTF FML
-    function tick() {
-	console.log("tick");
-	engine.context.clearRect ( 0 , 0 , engine.width , engine.height );
-        for (var i = 0; i < engine.objects.length; i++) {
-            engine.objects[i].tick();
-        }
-    }
+
