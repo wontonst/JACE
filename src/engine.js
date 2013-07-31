@@ -16,7 +16,7 @@ var engine = {
      */
     Engine: function(id, tr, h, w) {
         this.tickrate = tr;
-        this.canvas = document.getElementById(id)
+        this.canvas = document.getElementById(id);
         this.height = h;
         this.width = w;
         this.canvas.height = this.height;
@@ -44,7 +44,6 @@ var engine = {
     },
     /**
      * @brief constructor for Drawable
-     * @param {2DCanvasContext} ctx 
      * @param {AtlasImage} aimage 
      */
     draw: function(aimage) {
@@ -72,7 +71,7 @@ var engine = {
             if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
                 funct(xmlhttp.responseText);
             }
-        }
+        };
         xmlhttp.open("GET", url, true);
         xmlhttp.send();
     }

@@ -5,4 +5,4 @@ function Drawable(initx, inity) {
 }
 Drawable.prototype.tick = function() {
     console.log("ERROR: CALLING Drawable.tick WITHOUT USING INHERITANCE");
-}
+};

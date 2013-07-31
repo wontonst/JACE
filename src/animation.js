@@ -33,7 +33,7 @@ Animation.prototype.tick = function() {
         return true;
     }
     return false;
-}
+};
 Animation.prototype.getCurrentImage = function() {
     return this.frames[this.currframe];
-}
+};
