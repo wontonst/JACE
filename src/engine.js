@@ -59,5 +59,4 @@ var engine = {
                 aimage.atlas.imgwidth, aimage.atlas.imgheight);
     }
 };
-//HORRIBEL HACK WTF FML
 
