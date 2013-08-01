@@ -25,7 +25,7 @@ var resources = {
         xmlhttp.onreadystatechange = function()
         {
             if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                console.log("loaded " + id);
+                console.log("loaded " + resources.files[id]['path']);
                 resources.files[id]['value'] = xmlhttp.responseText;
                 resources.files[id]['loaded'] = true;
                 if(resources.doneLoading()){
@@ -37,7 +37,6 @@ var resources = {
         xmlhttp.send();
     },
     doneLoading: function() {
-        console.log(JSON.stringify(this.files));
         for (var d in this.files) {
             if (!this.files[d]['loaded'])
                 return false;
