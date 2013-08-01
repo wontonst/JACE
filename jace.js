@@ -21,8 +21,9 @@ var resources = {
         xmlhttp.onreadystatechange = function()
         {
             if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                resources.files.id.value = xmlhttp.responseText;
-                resources.files.id.loaded = true;
+		console.log("loaded " + id);
+                resources.files[id]['value'] = xmlhttp.responseText;
+                resources.files[id]['loaded'] = true;
             }
         };
         xmlhttp.open("GET", url, true);
@@ -157,5 +158,4 @@ var engine = {
                 aimage.atlas.imgwidth, aimage.atlas.imgheight);
     }
 };
-//HORRIBEL HACK WTF FML
 
