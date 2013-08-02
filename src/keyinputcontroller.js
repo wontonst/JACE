@@ -1,7 +1,5 @@
 function KeyInputController(keystolistenfor) {
     this.keys = keystolistenfor;
-    engine.canvas.addEventListener('keydown', this.handleKeyDown);
-    engine.canvas.addEventListener('keyup', this.handleKeyUp);
 }
 KeyInputController.prototype.getKeyState = function(keyID) {
     if (!this.keys[keyID]) {
@@ -10,12 +8,22 @@ KeyInputController.prototype.getKeyState = function(keyID) {
     return this.keys[keyID].presstime;
 };
 KeyInputController.prototype.handleKeyDown = function(event) {
-    if (this.keys[event.keyID]) {
-        this.keys[event.keyID].presstime = window.performance.now();
+//    console.log(event);
+    if (typeof(this.keys[event.keyCode]) != 'undefined') {
+        this.keys[event.keyCode].presstime = window.performance.now();
     }
 };
 KeyInputController.prototype.handleKeyUp = function(event) {
-    if (this.keys[event.keyID]) {
-        this.keys[event.keyID].presstime = 0;
+//    console.log(event);    
+if (this.keys[event.keyCode]) {
+        this.keys[event.keyCode].presstime = 0;
     }
 };
+KeyInputController.prototype.startListener = function() {
+//    console.log(JSON.stringify(engine.canvas));
+    var self = this;
+    this.kd = function(a) { self.handleKeyDown(a);};
+    this.ku = function(a) { self.handleKeyUp(a);};
+    engine.canvas.addEventListener('keydown', this.kd,false);
+    engine.canvas.addEventListener('keyup', this.ku,false);
+}

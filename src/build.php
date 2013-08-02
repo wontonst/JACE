@@ -3,14 +3,14 @@
 $files = array(
     'resources',
     'keypress',
-    'keyinputcontroller',
     'drawable',
     'frame',
     'animation',
     'atlasimage',
     'atlasdefinition',
     'coordinates',
-    'engine'
+    'engine',
+    'keyinputcontroller',
 );
 
 foreach ($files as $v) {

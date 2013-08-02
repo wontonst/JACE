@@ -32,6 +32,8 @@ var engine = {
         this.canvas.height = this.height;
         this.canvas.width = this.width;
         this.context = this.canvas.getContext('2d');
+	this.canvas.setAttribute('tabindex','0');
+	this.canvas.focus();
     },
     start: function() {
         setInterval('engine.tick()', this.tickrate);
@@ -43,7 +45,7 @@ var engine = {
         this.objects.push(nd);
     },
     tick: function() {
-        console.log("tick " + window.performance.now());
+//        console.log("tick " + window.performance.now());
 //        engine.context.clearRect(0, 0, engine.width, engine.height);
         for (var i = 0; i < engine.objects.length; i++) {
             engine.objects[i].tick();
@@ -54,7 +56,7 @@ var engine = {
      * @param {AtlasImage} aimage 
      */
     draw: function(aimage, x, y) {
-        console.log("draw operation: " + aimage.atlas.atlasx + "," + aimage.atlas.atlasy + ","
+        console.log("draw operation: " + aimage.img.src + " - " + aimage.atlas.atlasx + "," + aimage.atlas.atlasy + ","
                 + aimage.atlas.imgwidth + "," + aimage.atlas.imgheight + ","
                 + x + "," + y + "," +
                 aimage.atlas.imgwidth + "," + aimage.atlas.imgheight);

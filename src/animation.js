@@ -2,8 +2,7 @@
  * @param {Array} frames list of Frame objects
  * @returns {Animation}
  */function Animation(frames) {
-    this.frames = frames
-
+     this.frames = frames;
     this.reset();
 }
 /**
@@ -12,8 +11,11 @@
  */
 Animation.prototype.tick = function() {
 //    console.log(JSON.stringify(this.frames));
+    if(!this.playing)return;
     if (this.currpause-- <= 0) {
-        this.currframe = (this.currframe + 1) % this.frames.length;
+	if(++this.currframe == this.frames.length){
+	    this.reset();
+	    return true;}
         this.currpause = this.frames[this.currframe].pause;
         return true;
     }
@@ -28,4 +30,11 @@ Animation.prototype.getLastImage = function() {
 Animation.prototype.reset = function() {
     this.currpause = this.frames[0].pause;
     this.currframe = 0;
+     this.playing = false;
 };
+Animation.prototype.isPlaying = function(){
+    return this.playing;
+}
+Animation.prototype.play = function(){
+    this.playing = true;
+}
