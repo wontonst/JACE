@@ -4,8 +4,7 @@
  */function Animation(frames) {
     this.frames = frames
 
-    this.currpause = this.frames[0].pause;
-    this.currframe = 0;
+    this.reset();
 }
 /**
  * @brief called on each turn of engine.tick()
@@ -25,4 +24,8 @@ Animation.prototype.getCurrentImage = function() {
 };
 Animation.prototype.getLastImage = function() {
     return this.frames[(this.currframe - 1 + this.frames.length) % this.frames.length].img;
-}
+};
+Animation.prototype.reset = function() {
+    this.currpause = this.frames[0].pause;
+    this.currframe = 0;
+};

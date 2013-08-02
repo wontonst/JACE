@@ -1,9 +1,11 @@
 <?php
 
 $files = array(
-'resources',
+    'resources',
+    'keypress',
+    'keyinputcontroller',
     'drawable',
-'frame',
+    'frame',
     'animation',
     'atlasimage',
     'atlasdefinition',
@@ -11,7 +13,7 @@ $files = array(
     'engine'
 );
 
-foreach($files as $v){
-    include(__DIR__.'/'.$v.'.js');
+foreach ($files as $v) {
+    include(__DIR__ . '/' . $v . '.js');
 }
 ?>
