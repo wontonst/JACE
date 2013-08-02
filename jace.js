@@ -53,7 +53,10 @@ function Drawable(initx, inity) {
 Drawable.prototype.tick = function() {
     console.log("ERROR: CALLING Drawable.tick WITHOUT USING INHERITANCE");
 };
-/**
+function Frame(img, pause) {
+    this.img = img;
+    this.pause = Math.floor(pause / engine.tickrate);
+}/**
  * 
  * @param {List<obj>} keyframearray each object is a TexturePacker JSON output entry
  * @param {List<int>} keyframewait each int represents time to display frame in milliseconds

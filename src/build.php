@@ -3,6 +3,7 @@
 $files = array(
 'resources',
     'drawable',
+'frame',
     'animation',
     'atlasimage',
     'atlasdefinition',
