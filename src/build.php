@@ -3,6 +3,7 @@
 $files = array(
 'resources',
     'drawable',
+'frame',
     'animation',
     'atlasimage',
     'atlasdefinition',
@@ -11,6 +12,6 @@ $files = array(
 );
 
 foreach($files as $v){
-    include(__DIR__.'/src/'.$v.'.js');
+    include(__DIR__.'/'.$v.'.js');
 }
 ?>
