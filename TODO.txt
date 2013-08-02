@@ -1,2 +1,2 @@
--animation delay
--atlas class
+-optimize resources.doneLoading
+-switch to draw on center

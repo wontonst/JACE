@@ -3,7 +3,7 @@
  * @returns {Animation}
  */function Animation(frames) {
     this.frames = frames
-    
+
     this.currpause = this.frames[0].pause;
     this.currframe = 0;
 }
@@ -23,6 +23,6 @@ Animation.prototype.tick = function() {
 Animation.prototype.getCurrentImage = function() {
     return this.frames[this.currframe].img;
 };
-Animation.prototype.getLastImage = function(){
-    return this.frames[(this.currframe-1+this.frames.length)%this.frames.length].img;
+Animation.prototype.getLastImage = function() {
+    return this.frames[(this.currframe - 1 + this.frames.length) % this.frames.length].img;
 }
