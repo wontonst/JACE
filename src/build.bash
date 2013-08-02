@@ -1,1 +1,1 @@
-php ../build.php > ../jace.js
+php build.php > ../jace.js
