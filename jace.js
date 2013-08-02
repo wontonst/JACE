@@ -233,8 +233,7 @@ var engine = {
     draw: function(aimage, x, y) {
         console.log("draw operation: " + aimage.img.src + " - " + aimage.atlas.atlasx + "," + aimage.atlas.atlasy + ","
                 + aimage.atlas.imgwidth + "," + aimage.atlas.imgheight + ","
-                + x + "," + y + "," +
-                aimage.atlas.imgwidth + "," + aimage.atlas.imgheight);
+                + x + "," + y);
 
         engine.context.drawImage(aimage.img,
                 aimage.atlas.atlasx, aimage.atlas.atlasy,
