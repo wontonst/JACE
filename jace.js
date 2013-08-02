@@ -53,14 +53,16 @@ function Drawable(initx, inity) {
 Drawable.prototype.tick = function() {
     console.log("ERROR: CALLING Drawable.tick WITHOUT USING INHERITANCE");
 };
+/**
+@param {AtlasImage} img
+@param {int} pause milliseconds to display the frame
+*/
 function Frame(img, pause) {
     this.img = img;
-    this.pause = Math.floor(pause / engine.tickrate);
+    this.pause = Math.round(pause / engine.tickrate);
+//    console.log(engine.tickrate + " " + pause+ " "  +this.pause);
 }/**
- * 
- * @param {List<obj>} keyframearray each object is a TexturePacker JSON output entry
- * @param {List<int>} keyframewait each int represents time to display frame in milliseconds
- * @param {string} img image
+ * @param {Array} frames list of Frame objects
  * @returns {Animation}
  */function Animation(frames) {
     this.frames = frames
@@ -73,6 +75,7 @@ function Frame(img, pause) {
  * @returns {Boolean} whether or not a frame change has occurred
  */
 Animation.prototype.tick = function() {
+//    console.log(JSON.stringify(this.frames));
     if (this.currpause-- <= 0) {
         this.currframe = (this.currframe + 1) % this.frames.length;
         this.currpause = this.frames[this.currframe].pause;
@@ -82,7 +85,13 @@ Animation.prototype.tick = function() {
 };
 Animation.prototype.getCurrentImage = function() {
     return this.frames[this.currframe].img;
-};function AtlasImage(img, atlasx, atlasy, iwidth, iheight) {
+};
+Animation.prototype.getLastImage = function(){
+    return this.frames[(this.currframe-1+this.frames.length)%this.frames.length].img;
+}/**
+@param {Image} img
+*/
+function AtlasImage(img, atlasx, atlasy, iwidth, iheight) {
     this.atlas = new AtlasDefinition(atlasx, atlasy, iwidth, iheight);
     this.img = img;
 }function AtlasDefinition(atlasx, atlasy, iwidth, iheight) {
@@ -97,7 +106,15 @@ Animation.prototype.getCurrentImage = function() {
 Coordinates.prototype.move = function(x,y){
     this.x += x;
     this.y += y;
-};
+};window.performance = window.performance || {};
+performance.now = (function() {
+  return performance.now       ||
+         performance.mozNow    ||
+         performance.msNow     ||
+         performance.oNow      ||
+         performance.webkitNow ||
+        function() { return new Date().getTime(); };
+})();
 var engine = {
     height: '', ///<height of canvas
     width: '', ///<width of canvas
@@ -131,12 +148,9 @@ var engine = {
     addDrawable: function(nd) {
         this.objects.push(nd);
     },
-    resourceOnload: function(r) {
-        console.log(r + " successfully loaded.");
-    },
     tick: function() {
-        console.log("tick");
-        engine.context.clearRect(0, 0, engine.width, engine.height);
+        console.log("tick " + window.performance.now());
+//        engine.context.clearRect(0, 0, engine.width, engine.height);
         for (var i = 0; i < engine.objects.length; i++) {
             engine.objects[i].tick();
         }
@@ -145,16 +159,16 @@ var engine = {
      * @brief constructor for Drawable
      * @param {AtlasImage} aimage 
      */
-    draw: function(aimage) {
-        console.log(this.atlas.atlasx + "," + this.atlas.atlasy + ","
-                + this.atlas.imgwidth + "," + this.atlas.imgheight + ","
-                + this.getNextX() + "," + this.getNextY() + "," +
-                this.atlast.imgwidth + "," + this.atlast.imgheight);
+    draw: function(aimage,x,y) {
+        console.log("draw operation: " + aimage.atlas.atlasx + "," + aimage.atlas.atlasy + ","
+                + aimage.atlas.imgwidth + "," + aimage.atlas.imgheight + ","
+                + x + "," + y + "," +
+                aimage.atlas.imgwidth + "," + aimage.atlas.imgheight);
 
         engine.context.drawImage(aimage.img,
                 aimage.atlas.atlasx, aimage.atlas.atlasy,
                 aimage.atlas.imgwidth, aimage.atlas.imgheight,
-                this.position.x, this.position.y,
+                x, y,
                 aimage.atlas.imgwidth, aimage.atlas.imgheight);
     }
 };

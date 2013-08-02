@@ -1,4 +1,12 @@
-
+window.performance = window.performance || {};
+performance.now = (function() {
+  return performance.now       ||
+         performance.mozNow    ||
+         performance.msNow     ||
+         performance.oNow      ||
+         performance.webkitNow ||
+        function() { return new Date().getTime(); };
+})();
 var engine = {
     height: '', ///<height of canvas
     width: '', ///<width of canvas
@@ -32,12 +40,9 @@ var engine = {
     addDrawable: function(nd) {
         this.objects.push(nd);
     },
-    resourceOnload: function(r) {
-        console.log(r + " successfully loaded.");
-    },
     tick: function() {
-        console.log("tick");
-        engine.context.clearRect(0, 0, engine.width, engine.height);
+        console.log("tick " + window.performance.now());
+//        engine.context.clearRect(0, 0, engine.width, engine.height);
         for (var i = 0; i < engine.objects.length; i++) {
             engine.objects[i].tick();
         }
@@ -46,16 +51,16 @@ var engine = {
      * @brief constructor for Drawable
      * @param {AtlasImage} aimage 
      */
-    draw: function(aimage) {
-        console.log(this.atlas.atlasx + "," + this.atlas.atlasy + ","
-                + this.atlas.imgwidth + "," + this.atlas.imgheight + ","
-                + this.getNextX() + "," + this.getNextY() + "," +
-                this.atlast.imgwidth + "," + this.atlast.imgheight);
+    draw: function(aimage,x,y) {
+        console.log("draw operation: " + aimage.atlas.atlasx + "," + aimage.atlas.atlasy + ","
+                + aimage.atlas.imgwidth + "," + aimage.atlas.imgheight + ","
+                + x + "," + y + "," +
+                aimage.atlas.imgwidth + "," + aimage.atlas.imgheight);
 
         engine.context.drawImage(aimage.img,
                 aimage.atlas.atlasx, aimage.atlas.atlasy,
                 aimage.atlas.imgwidth, aimage.atlas.imgheight,
-                this.position.x, this.position.y,
+                x, y,
                 aimage.atlas.imgwidth, aimage.atlas.imgheight);
     }
 };
