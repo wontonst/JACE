@@ -1,11 +1,13 @@
 window.performance = window.performance || {};
 performance.now = (function() {
-  return performance.now       ||
-         performance.mozNow    ||
-         performance.msNow     ||
-         performance.oNow      ||
-         performance.webkitNow ||
-        function() { return new Date().getTime(); };
+    return performance.now ||
+            performance.mozNow ||
+            performance.msNow ||
+            performance.oNow ||
+            performance.webkitNow ||
+            function() {
+                return new Date().getTime();
+            };
 })();
 var engine = {
     height: '', ///<height of canvas
@@ -51,7 +53,7 @@ var engine = {
      * @brief constructor for Drawable
      * @param {AtlasImage} aimage 
      */
-    draw: function(aimage,x,y) {
+    draw: function(aimage, x, y) {
         console.log("draw operation: " + aimage.atlas.atlasx + "," + aimage.atlas.atlasy + ","
                 + aimage.atlas.imgwidth + "," + aimage.atlas.imgheight + ","
                 + x + "," + y + "," +
