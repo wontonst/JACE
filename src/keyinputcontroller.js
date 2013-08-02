@@ -14,7 +14,6 @@ KeyInputController.prototype.handleKeyDown = function(event) {
         this.keys[event.keyID].presstime = window.performance.now();
     }
 };
-
 KeyInputController.prototype.handleKeyUp = function(event) {
     if (this.keys[event.keyID]) {
         this.keys[event.keyID].presstime = 0;
