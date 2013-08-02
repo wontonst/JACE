@@ -14,6 +14,9 @@ var resources = {
     retrieve: function(id) {
         return this.files[id]['value'];
     },
+    onload: function(name) {
+        console.log("loaded " + name);
+    },
     getJSON: function(url, id, callback) {
         var xmlhttp;
         if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
@@ -25,10 +28,10 @@ var resources = {
         xmlhttp.onreadystatechange = function()
         {
             if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                console.log("loaded " + resources.files[id]['path']);
+                resources.onload(resources.files[id]['path']);
                 resources.files[id]['value'] = xmlhttp.responseText;
                 resources.files[id]['loaded'] = true;
-                if(resources.doneLoading()){
+                if (resources.doneLoading()) {
                     callback();
                 }
             }
@@ -56,22 +59,10 @@ Drawable.prototype.tick = function() {
  * @param {List<int>} keyframewait each int represents time to display frame in milliseconds
  * @param {string} img image
  * @returns {Animation}
- */function Animation(keyframearray, keyframewait, img) {
-    if (keyframearray.length !== keyframewait.length) {
-        throw "Animation: keyframearray.length != keyframewait.length";
-    }
-    this.frames = [];
-    this.pauses = [];
-    this.img = img;
-    //determine number of ticks to wait
-    for (var i = 0; i < keyframewait.length; i++) {
-        this.pauses.push((int)(keyframewait[i] / engine.tickrate));
-    }
-    //push each individual animation frame
-    for (var i = 0; i < keyframearray.length; i++) {
-        this.frames.push(new TPImage(img, keyframearray[i].frame.x, keyframearray[i].frame.y, keyframearray[i].frame.w, keyframearray[i].frame.h));
-    }
-    this.currpause = this.pauses[0];
+ */function Animation(frames) {
+    this.frames = frames
+    
+    this.currpause = this.frames[0].pause;
     this.currframe = 0;
 }
 /**
@@ -81,13 +72,13 @@ Drawable.prototype.tick = function() {
 Animation.prototype.tick = function() {
     if (this.currpause-- <= 0) {
         this.currframe = (this.currframe + 1) % this.frames.length;
-        this.currpause = this.pauses[this.currframe];
+        this.currpause = this.frames[this.currframe].pause;
         return true;
     }
     return false;
 };
 Animation.prototype.getCurrentImage = function() {
-    return this.frames[this.currframe];
+    return this.frames[this.currframe].img;
 };function AtlasImage(img, atlasx, atlasy, iwidth, iheight) {
     this.atlas = new AtlasDefinition(atlasx, atlasy, iwidth, iheight);
     this.img = img;
