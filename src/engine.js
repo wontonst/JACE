@@ -50,11 +50,13 @@ var engine = {
         for (var i = 0; i < engine.objects.length; i++) {
             engine.objects[i].tick();
         }
-    },
-    /**
-     * @brief constructor for Drawable
-     * @param {AtlasImage} aimage 
-     */
+    }
+            /*
+             * @brief force draw onto canvas
+             * @param {AtlasImage} aimage
+             * @param {int} x x-coordinate to draw on
+             * @param {int} y y-coordinate to draw on
+             
     draw: function(aimage, x, y) {
         console.log("draw operation: " + aimage.img.src + " - " + aimage.atlas.atlasx + "," + aimage.atlas.atlasy + ","
                 + aimage.atlas.imgwidth + "," + aimage.atlas.imgheight + ","
@@ -65,6 +67,6 @@ var engine = {
                 aimage.atlas.imgwidth, aimage.atlas.imgheight,
                 x, y,
                 aimage.atlas.imgwidth, aimage.atlas.imgheight);
-    }
+    }*/
 };
 
