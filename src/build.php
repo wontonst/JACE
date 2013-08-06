@@ -5,6 +5,7 @@ $files = array(
     'resources',
     'keypress',
     'drawable',
+'map',
     'frame',
     'animation',
     'atlasimage',
