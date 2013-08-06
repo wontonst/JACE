@@ -13,7 +13,7 @@ function AtlasImage(img, atlasx, atlasy, iwidth, iheight) {
     this.center = new Coordinates(iwidth / 2, iheight / 2);
 }
 AtlasImage.prototype.draw = function(x, y) {
-    engine.drawdebug(this,x,y);
+//    engine.drawdebug(this,x,y);
     engine.context.drawImage(this.img,
             this.atlas.atlasx, this.atlas.atlasy,
             this.atlas.imgwidth, this.atlas.imgheight,

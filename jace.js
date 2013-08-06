@@ -1,4 +1,11 @@
-var resources = {
+function Coordinates(x, y) {
+    this.x = x;
+    this.y = y;
+}
+Coordinates.prototype.move = function(x, y) {
+    this.x += x;
+    this.y += y;
+};var resources = {
     files: {}, ///<list of files to be loaded
     /**
      * @brief adds a file to be loaded
@@ -84,10 +91,14 @@ var resources = {
  * @brief an object to be drawn onto the canvas
  * @param {int} initx initial starting position of the object
  * @param {int} inity initial starting position of the object
+ * @param {int} layer order of rendering
  * @returns {Drawable}
  */
-function Drawable(initx, inity) {
+function Drawable(initx, inity, layer) {
     this.position = new Coordinates(initx, inity);
+    if (layer == 'undefined')
+        throw "Drawable constructor's layer parameter cannot be undefined";
+    this.layer = layer;
 }
 /**
  * @brief called each tick of the engine
@@ -95,7 +106,7 @@ function Drawable(initx, inity) {
 Drawable.prototype.tick = function() {
     console.log("ERROR: CALLING Drawable.tick WITHOUT USING INHERITANCE");
 };
-Drawable.prototype.draw = function(){
+Drawable.prototype.draw = function() {
     console.log("ERROR: CALLING Drawable.draw WITHOUT USING INHERITANCE");
 }/**
  @param {AtlasImage} img
@@ -108,8 +119,9 @@ function Frame(img, pause) {
 }/**
  * @param {Array} frames list of Frame objects
  * @returns {Animation}
- */function Animation(frames) {
-     this.frames = frames;
+ */
+function Animation(frames) {
+    this.frames = frames;
     this.reset();
 }
 /**
@@ -118,11 +130,13 @@ function Frame(img, pause) {
  */
 Animation.prototype.tick = function() {
 //    console.log(JSON.stringify(this.frames));
-    if(!this.playing)return;
+    if (!this.playing)
+        return;
     if (this.currpause-- <= 0) {
-	if(++this.currframe == this.frames.length){
-	    this.reset();
-	    return true;}
+        if (++this.currframe == this.frames.length) {
+            this.reset();
+            return true;
+        }
         this.currpause = this.frames[this.currframe].pause;
         return true;
     }
@@ -132,19 +146,26 @@ Animation.prototype.getCurrentImage = function() {
     return this.frames[this.currframe].img;
 };
 Animation.prototype.getLastImage = function() {
-    return this.frames[(this.currframe - 1 + this.frames.length) % this.frames.length].img;
+    return this.frames[this.lastframe].img;
+    //   return this.frames[(this.currframe - 1 + this.frames.length) % this.frames.length].img;
 };
 Animation.prototype.reset = function() {
     this.currpause = this.frames[0].pause;
     this.currframe = 0;
-     this.playing = false;
+    this.playing = false;
+    this.lastframe = 0;
 };
-Animation.prototype.isPlaying = function(){
+Animation.prototype.isPlaying = function() {
     return this.playing;
-}
-Animation.prototype.play = function(){
+};
+Animation.prototype.play = function() {
     this.playing = true;
-}/**
+};
+Animation.prototype.draw = function(x, y) {
+    this.getLastImage().clear(x, y);
+    this.getCurrentImage().draw(x, y);
+    this.lastframe = this.currframe;
+};/**
  * @brief defines an image within an atlas
  * @param {Image} img raw image 
  * @param {int} atlasx image x-position on atlas
@@ -159,7 +180,7 @@ function AtlasImage(img, atlasx, atlasy, iwidth, iheight) {
     this.center = new Coordinates(iwidth / 2, iheight / 2);
 }
 AtlasImage.prototype.draw = function(x, y) {
-    engine.drawdebug(this,x,y);
+//    engine.drawdebug(this,x,y);
     engine.context.drawImage(this.img,
             this.atlas.atlasx, this.atlas.atlasy,
             this.atlas.imgwidth, this.atlas.imgheight,
@@ -180,13 +201,19 @@ AtlasImage.prototype.clear = function(x,y){
     this.atlasy = atlasy;
     this.imgwidth = iwidth;
     this.imgheight = iheight;
-}function Coordinates(x, y) {
-    this.x = x;
-    this.y = y;
+}function Renderer() {
+    this.drawables = [];
 }
-Coordinates.prototype.move = function(x, y) {
-    this.x += x;
-    this.y += y;
+Renderer.prototype.add = function(d) {
+    this.drawables.push(d);
+    this.drawables.sort(function(a, b) {
+        return a.layer - b.layer;
+    });
+};
+Renderer.prototype.render = function() {
+    for (var i = 0; i < this.drawables.length; i++) {
+        this.drawables[i].draw();
+    }
 };window.performance = window.performance || {};
 performance.now = (function() {
     return performance.now ||
@@ -203,63 +230,72 @@ var engine = {
     width: '', ///<width of canvas
     context: '', ///<canvas context
     canvas: '', ///<canvas to draw on
-    objects: [], ///<list of Drawable objects
-    thread: '', ///<ID of the thread used for clearInterval
+    tickthread: '', ///<ID of the thread used for tick()
+    renderthread: '', ///<ID of the thread used for draw()
+    renderer: '',
+    objects:[],///<list of drawables
     /**
      * @brief constructor for the engine
      * @param {string} id id of the canvas element
      * @param {int} tr refresh rate in ms
+     * @param {int} fr frame rate in FPS
      * @param {int} h height of the canvas
      * @param {int} w width of the canvas
      * @returns {undefined}
      */
-    Engine: function(id, tr, w,h) {
+    Engine: function(id, tr, fr, w, h) {
         this.tickrate = tr;
+        this.framerate = 1000 / fr;
         this.canvas = document.getElementById(id);
         this.height = h;
         this.width = w;
         this.canvas.height = this.height;
         this.canvas.width = this.width;
         this.context = this.canvas.getContext('2d');
-	this.canvas.setAttribute('tabindex','0');
-	this.canvas.focus();
+        this.canvas.setAttribute('tabindex', '0');
+        this.canvas.focus();
+        this.renderer = new Renderer();
     },
     start: function() {
-        setInterval('engine.tick()', this.tickrate);
+        this.tickthread = setInterval('engine.tick()', this.tickrate);
+        this.renderthread = setInterval('engine.draw()', this.framerate);
     },
     stop: function() {
-        clearInterval(thread);
+        clearInterval(tickthread);
+        clearInterval(this.renderthread);
     },
     addDrawable: function(nd) {
-        this.objects.push(nd);
+	this.objects.push(nd);
+        this.renderer.add(nd);
     },
     tick: function() {
-//        console.log("tick " + window.performance.now());
-//        engine.context.clearRect(0, 0, engine.width, engine.height);
         for (var i = 0; i < engine.objects.length; i++) {
             engine.objects[i].tick();
         }
     },
-    drawdebug: function(aimage,x,y){
+    draw: function() {
+        this.renderer.render();
+    },
+    drawdebug: function(aimage, x, y) {
         console.log("draw operation: " + aimage.img.src + " - atlas(" + aimage.atlas.atlasx + "," + aimage.atlas.atlasy + ") height("
                 + aimage.atlas.imgwidth + "," + aimage.atlas.imgheight + ") position("
-                + x + "," + y +")");
+                + x + "," + y + ")");
 
     }
-            /*
-             * @brief force draw onto canvas
-             * @param {AtlasImage} aimage
-             * @param {int} x x-coordinate to draw on
-             * @param {int} y y-coordinate to draw on
-             
-    draw: function(aimage, x, y) {
-
-        engine.context.drawImage(aimage.img,
-                aimage.atlas.atlasx, aimage.atlas.atlasy,
-                aimage.atlas.imgwidth, aimage.atlas.imgheight,
-                x, y,
-                aimage.atlas.imgwidth, aimage.atlas.imgheight);
-    }*/
+    /*
+     * @brief force draw onto canvas
+     * @param {AtlasImage} aimage
+     * @param {int} x x-coordinate to draw on
+     * @param {int} y y-coordinate to draw on
+     
+     draw: function(aimage, x, y) {
+     
+     engine.context.drawImage(aimage.img,
+     aimage.atlas.atlasx, aimage.atlas.atlasy,
+     aimage.atlas.imgwidth, aimage.atlas.imgheight,
+     x, y,
+     aimage.atlas.imgwidth, aimage.atlas.imgheight);
+     }*/
 };
 
 /**

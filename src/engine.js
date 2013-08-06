@@ -17,6 +17,7 @@ var engine = {
     tickthread: '', ///<ID of the thread used for tick()
     renderthread: '', ///<ID of the thread used for draw()
     renderer: '',
+    objects:[],///<list of drawables
     /**
      * @brief constructor for the engine
      * @param {string} id id of the canvas element
@@ -48,6 +49,7 @@ var engine = {
         clearInterval(this.renderthread);
     },
     addDrawable: function(nd) {
+	this.objects.push(nd);
         this.renderer.add(nd);
     },
     tick: function() {
