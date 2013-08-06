@@ -24,7 +24,7 @@ var engine = {
      * @param {int} w width of the canvas
      * @returns {undefined}
      */
-    Engine: function(id, tr, h, w) {
+    Engine: function(id, tr, w,h) {
         this.tickrate = tr;
         this.canvas = document.getElementById(id);
         this.height = h;
@@ -50,6 +50,12 @@ var engine = {
         for (var i = 0; i < engine.objects.length; i++) {
             engine.objects[i].tick();
         }
+    },
+    drawdebug: function(aimage,x,y){
+        console.log("draw operation: " + aimage.img.src + " - atlas(" + aimage.atlas.atlasx + "," + aimage.atlas.atlasy + ") height("
+                + aimage.atlas.imgwidth + "," + aimage.atlas.imgheight + ") position("
+                + x + "," + y +")");
+
     }
             /*
              * @brief force draw onto canvas
@@ -58,9 +64,6 @@ var engine = {
              * @param {int} y y-coordinate to draw on
              
     draw: function(aimage, x, y) {
-        console.log("draw operation: " + aimage.img.src + " - " + aimage.atlas.atlasx + "," + aimage.atlas.atlasy + ","
-                + aimage.atlas.imgwidth + "," + aimage.atlas.imgheight + ","
-                + x + "," + y);
 
         engine.context.drawImage(aimage.img,
                 aimage.atlas.atlasx, aimage.atlas.atlasy,

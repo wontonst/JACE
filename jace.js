@@ -95,7 +95,9 @@ function Drawable(initx, inity) {
 Drawable.prototype.tick = function() {
     console.log("ERROR: CALLING Drawable.tick WITHOUT USING INHERITANCE");
 };
-/**
+Drawable.prototype.draw = function(){
+    console.log("ERROR: CALLING Drawable.draw WITHOUT USING INHERITANCE");
+}/**
  @param {AtlasImage} img
  @param {int} pause milliseconds to display the frame
  */
@@ -154,6 +156,18 @@ Animation.prototype.play = function(){
 function AtlasImage(img, atlasx, atlasy, iwidth, iheight) {
     this.atlas = new AtlasDefinition(atlasx, atlasy, iwidth, iheight);
     this.img = img;
+    this.center = new Coordinates(iwidth / 2, iheight / 2);
+}
+AtlasImage.prototype.draw = function(x, y) {
+    engine.drawdebug(this,x,y);
+    engine.context.drawImage(this.img,
+            this.atlas.atlasx, this.atlas.atlasy,
+            this.atlas.imgwidth, this.atlas.imgheight,
+            x - this.center.x, y-this.center.y,
+            this.atlas.imgwidth, this.atlas.imgheight);
+};
+AtlasImage.prototype.clear = function(x,y){
+    engine.context.clearRect(x-this.center.x,y-this.center.y, this.atlas.imgwidth, this.atlas.imgheight);
 }/**
  *  @brief class used to define the position of an image within an atlas
  * @param {int} atlasx image x-position on atlas
@@ -199,7 +213,7 @@ var engine = {
      * @param {int} w width of the canvas
      * @returns {undefined}
      */
-    Engine: function(id, tr, h, w) {
+    Engine: function(id, tr, w,h) {
         this.tickrate = tr;
         this.canvas = document.getElementById(id);
         this.height = h;
@@ -226,26 +240,41 @@ var engine = {
             engine.objects[i].tick();
         }
     },
-    /**
-     * @brief constructor for Drawable
-     * @param {AtlasImage} aimage 
-     */
+    drawdebug: function(aimage,x,y){
+        console.log("draw operation: " + aimage.img.src + " - atlas(" + aimage.atlas.atlasx + "," + aimage.atlas.atlasy + ") height("
+                + aimage.atlas.imgwidth + "," + aimage.atlas.imgheight + ") position("
+                + x + "," + y +")");
+
+    }
+            /*
+             * @brief force draw onto canvas
+             * @param {AtlasImage} aimage
+             * @param {int} x x-coordinate to draw on
+             * @param {int} y y-coordinate to draw on
+             
     draw: function(aimage, x, y) {
-        console.log("draw operation: " + aimage.img.src + " - " + aimage.atlas.atlasx + "," + aimage.atlas.atlasy + ","
-                + aimage.atlas.imgwidth + "," + aimage.atlas.imgheight + ","
-                + x + "," + y);
 
         engine.context.drawImage(aimage.img,
                 aimage.atlas.atlasx, aimage.atlas.atlasy,
                 aimage.atlas.imgwidth, aimage.atlas.imgheight,
                 x, y,
                 aimage.atlas.imgwidth, aimage.atlas.imgheight);
-    }
+    }*/
 };
 
+/**
+ * @brief keeps track of a list of keys to listen for and updates it with keypress status
+ * @param {KeyPress} keystolistenfor list of keys to keep track of
+ * @returns {KeyInputController}
+ */
 function KeyInputController(keystolistenfor) {
     this.keys = keystolistenfor;
 }
+/**
+ * @brief given a javascript key ID, returns the current state of the key
+ * @param {int} keyID
+ * @returns {int} time of keypress or 0 if key is not pressed
+ */
 KeyInputController.prototype.getKeyState = function(keyID) {
     if (!this.keys[keyID]) {
         throw "KeyInputController could not find key with ID " + keyID;
@@ -260,15 +289,22 @@ KeyInputController.prototype.handleKeyDown = function(event) {
 };
 KeyInputController.prototype.handleKeyUp = function(event) {
 //    console.log(event);    
-if (this.keys[event.keyCode]) {
+    if (this.keys[event.keyCode]) {
         this.keys[event.keyCode].presstime = 0;
     }
 };
+/**
+ * @brief begins listening for key presses; listens to canvas only
+ */
 KeyInputController.prototype.startListener = function() {
 //    console.log(JSON.stringify(engine.canvas));
     var self = this;
-    this.kd = function(a) { self.handleKeyDown(a);};
-    this.ku = function(a) { self.handleKeyUp(a);};
-    engine.canvas.addEventListener('keydown', this.kd,false);
-    engine.canvas.addEventListener('keyup', this.ku,false);
+    this.kd = function(a) {
+        self.handleKeyDown(a);
+    };
+    this.ku = function(a) {
+        self.handleKeyUp(a);
+    };
+    engine.canvas.addEventListener('keydown', this.kd, false);
+    engine.canvas.addEventListener('keyup', this.ku, false);
 }
