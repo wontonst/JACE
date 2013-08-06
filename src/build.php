@@ -1,6 +1,7 @@
 <?php
 
 $files = array(
+    'coordinates',
     'resources',
     'keypress',
     'drawable',
@@ -8,7 +9,7 @@ $files = array(
     'animation',
     'atlasimage',
     'atlasdefinition',
-    'coordinates',
+	'renderer',
     'engine',
     'keyinputcontroller',
 );

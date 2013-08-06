@@ -2,10 +2,14 @@
  * @brief an object to be drawn onto the canvas
  * @param {int} initx initial starting position of the object
  * @param {int} inity initial starting position of the object
+ * @param {int} layer order of rendering
  * @returns {Drawable}
  */
-function Drawable(initx, inity) {
+function Drawable(initx, inity, layer) {
     this.position = new Coordinates(initx, inity);
+    if (layer == 'undefined')
+        throw "Drawable constructor's layer parameter cannot be undefined";
+    this.layer = layer;
 }
 /**
  * @brief called each tick of the engine
@@ -13,6 +17,6 @@ function Drawable(initx, inity) {
 Drawable.prototype.tick = function() {
     console.log("ERROR: CALLING Drawable.tick WITHOUT USING INHERITANCE");
 };
-Drawable.prototype.draw = function(){
+Drawable.prototype.draw = function() {
     console.log("ERROR: CALLING Drawable.draw WITHOUT USING INHERITANCE");
 }
