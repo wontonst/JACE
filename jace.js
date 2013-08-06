@@ -96,8 +96,9 @@ Coordinates.prototype.move = function(x, y) {
  */
 function Drawable(initx, inity, layer) {
     this.position = new Coordinates(initx, inity);
-    if (layer == 'undefined')
-        throw "Drawable constructor's layer parameter cannot be undefined";
+    if (typeof(layer) == 'undefined'){
+        console.log("Drawable constructor's layer parameter cannot be undefined" + new Error().stack);
+    }
     this.layer = layer;
 }
 /**
@@ -196,7 +197,8 @@ AtlasImage.prototype.clear = function(x,y){
  * @param {int} iwidth image width
  * @param {int} iheight image height
  * @returns {AtlasDefinition}
- */function AtlasDefinition(atlasx, atlasy, iwidth, iheight) {
+ */
+function AtlasDefinition(atlasx, atlasy, iwidth, iheight) {
     this.atlasx = atlasx;
     this.atlasy = atlasy;
     this.imgwidth = iwidth;
@@ -282,20 +284,6 @@ var engine = {
                 + x + "," + y + ")");
 
     }
-    /*
-     * @brief force draw onto canvas
-     * @param {AtlasImage} aimage
-     * @param {int} x x-coordinate to draw on
-     * @param {int} y y-coordinate to draw on
-     
-     draw: function(aimage, x, y) {
-     
-     engine.context.drawImage(aimage.img,
-     aimage.atlas.atlasx, aimage.atlas.atlasy,
-     aimage.atlas.imgwidth, aimage.atlas.imgheight,
-     x, y,
-     aimage.atlas.imgwidth, aimage.atlas.imgheight);
-     }*/
 };
 
 /**

@@ -66,19 +66,5 @@ var engine = {
                 + x + "," + y + ")");
 
     }
-    /*
-     * @brief force draw onto canvas
-     * @param {AtlasImage} aimage
-     * @param {int} x x-coordinate to draw on
-     * @param {int} y y-coordinate to draw on
-     
-     draw: function(aimage, x, y) {
-     
-     engine.context.drawImage(aimage.img,
-     aimage.atlas.atlasx, aimage.atlas.atlasy,
-     aimage.atlas.imgwidth, aimage.atlas.imgheight,
-     x, y,
-     aimage.atlas.imgwidth, aimage.atlas.imgheight);
-     }*/
 };
 

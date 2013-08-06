@@ -5,7 +5,8 @@
  * @param {int} iwidth image width
  * @param {int} iheight image height
  * @returns {AtlasDefinition}
- */function AtlasDefinition(atlasx, atlasy, iwidth, iheight) {
+ */
+function AtlasDefinition(atlasx, atlasy, iwidth, iheight) {
     this.atlasx = atlasx;
     this.atlasy = atlasy;
     this.imgwidth = iwidth;

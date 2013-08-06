@@ -7,8 +7,9 @@
  */
 function Drawable(initx, inity, layer) {
     this.position = new Coordinates(initx, inity);
-    if (layer == 'undefined')
-        throw "Drawable constructor's layer parameter cannot be undefined";
+    if (typeof(layer) == 'undefined'){
+        console.log("Drawable constructor's layer parameter cannot be undefined" + new Error().stack);
+    }
     this.layer = layer;
 }
 /**
