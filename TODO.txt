@@ -1,4 +1,3 @@
 -optimize resources.doneLoading
 -switch to draw on center
--double buffering
--modify draw to draw by ms diff
+-modify draw to draw by ms diff (GameTime)

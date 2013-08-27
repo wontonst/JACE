@@ -15,7 +15,7 @@ function Drawable(initx, inity, layer) {
 /**
  * @brief called each tick of the engine
  */
-Drawable.prototype.tick = function() {
+Drawable.prototype.tick = function(deltaT) {
     console.log("ERROR: CALLING Drawable.tick WITHOUT USING INHERITANCE");
 };
 Drawable.prototype.draw = function() {
