@@ -1,4 +1,34 @@
-function Coordinates(x, y) {
+function Vector2(){
+    this.x = 0;
+    this.y = 0;
+}
+Vector2.prototype.setX = function(x){
+    this.x = x;
+};
+Vector2.prototype.setY = function(y){
+    this.y = y;
+};
+Vector2.prototype.getX = function(){
+    return this.x;
+};
+Vector2.prototype.getY = function(){
+    return this.y;
+};
+
+function Vector3(){
+    this.x = 0;
+    this.y = 0;
+    this.z = 0;
+}
+Vector3.prototype = new Vector2();
+Vector3.constructor = Vector3;
+
+Vector3.prototype.setZ = function(z){
+    this.z = z;
+};
+Vector3.prototype.getZ = function(){
+    return this.z;
+};function Coordinates(x, y) {
     this.x = x;
     this.y = y;
 }
@@ -104,12 +134,18 @@ function Drawable(initx, inity, layer) {
 /**
  * @brief called each tick of the engine
  */
-Drawable.prototype.tick = function() {
+Drawable.prototype.tick = function(deltaT) {
     console.log("ERROR: CALLING Drawable.tick WITHOUT USING INHERITANCE");
 };
 Drawable.prototype.draw = function() {
     console.log("ERROR: CALLING Drawable.draw WITHOUT USING INHERITANCE");
-}/**
+}function Map(aimage){
+    this.image = aimage;
+}
+
+Map.prototype.draw = function(x,y){
+
+};/**
  @param {AtlasImage} img
  @param {int} pause milliseconds to display the frame
  */
@@ -271,10 +307,14 @@ var engine = {
         this.renderer.add(nd);
     },
     tick: function() {
+var t = window.performance.now() - this.lasttime;
+console.out("deltaT:"+t);
+this.lasttime = window.performance.now();
         for (var i = 0; i < engine.objects.length; i++) {
-            engine.objects[i].tick();
+            engine.objects[i].tick(t);
         }
     },
+lasttime:0,
     draw: function() {
         this.renderer.render();
     },

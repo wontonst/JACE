@@ -1,6 +1,7 @@
 <?php
 
 $files = array(
+'vector',
     'coordinates',
     'resources',
     'keypress',

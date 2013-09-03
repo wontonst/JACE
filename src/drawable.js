@@ -20,4 +20,4 @@ Drawable.prototype.tick = function(deltaT) {
 };
 Drawable.prototype.draw = function() {
     console.log("ERROR: CALLING Drawable.draw WITHOUT USING INHERITANCE");
-}
+};
