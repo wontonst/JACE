@@ -54,7 +54,7 @@ var engine = {
     },
     tick: function() {
 var t = window.performance.now() - this.lasttime;
-console.out("deltaT:"+t);
+console.log("deltaT:"+t);
 this.lasttime = window.performance.now();
         for (var i = 0; i < engine.objects.length; i++) {
             engine.objects[i].tick(t);

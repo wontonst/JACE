@@ -139,7 +139,7 @@ Drawable.prototype.tick = function(deltaT) {
 };
 Drawable.prototype.draw = function() {
     console.log("ERROR: CALLING Drawable.draw WITHOUT USING INHERITANCE");
-}function Map(aimage){
+};function Map(aimage){
     this.image = aimage;
 }
 
@@ -308,7 +308,7 @@ var engine = {
     },
     tick: function() {
 var t = window.performance.now() - this.lasttime;
-console.out("deltaT:"+t);
+console.log("deltaT:"+t);
 this.lasttime = window.performance.now();
         for (var i = 0; i < engine.objects.length; i++) {
             engine.objects[i].tick(t);
