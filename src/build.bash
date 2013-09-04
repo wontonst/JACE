@@ -1,0 +1,1 @@
+coffee -c -j *.coffee
