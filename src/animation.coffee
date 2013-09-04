@@ -12,10 +12,10 @@ constructor: (@frames) ->
  * @returns {Boolean} whether or not a frame change has occurred
 ###
 tick: () ->
-if(!this.playing)
+if not @playing
 return
-if(this.currpause-- <= 0){
-if(++this.currframe is this.frames.length){
+if this.currpause-- <= 0{
+if ++this.currframe is this.frames.length{
 @reset()
 true
 }
